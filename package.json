@@ -4,6 +4,7 @@
   "description": "A Differentiation DSL",
   "main": "dist/index.js",
   "scripts": {
+    "build": "make",
     "test": "make check"
   },
   "repository": {
