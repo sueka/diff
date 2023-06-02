@@ -1,4 +1,6 @@
-class Var {
+import Num from './Num'
+
+export default class Var implements Diffible<Var, Num> {
   #letter: string
 
   constructor(letter: string) {
@@ -7,5 +9,9 @@ class Var {
 
   toString() {
     return this.#letter
+  }
+
+  diff() {
+    return new Num(1)
   }
 }
