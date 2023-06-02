@@ -1,2 +1,7 @@
+/dist/
+
 # npm
 /node_modules/
+
+# tsc
+*.js
