@@ -10,6 +10,5 @@ build : dist
 dist : tsconfig.json $(src)
 	$(NPX) tsc --project $<
 
-check :
-	@echo >&2 "No test specified"
-	@exit 1
+check : jest.config.mjs $(src)
+	$(NPX) jest --config $<

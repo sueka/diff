@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/sueka/diff/issues"
   },
-  "homepage": "https://github.com/sueka/diff#readme"
+  "homepage": "https://github.com/sueka/diff#readme",
+  "dependencies": {
+    "@types/jest": "^29.5.2",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.1.3"
+  }
 }
