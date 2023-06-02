@@ -5,4 +5,5 @@
 build :
 
 check :
+	@echo >&2 "No test specified"
 	@exit 1
