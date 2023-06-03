@@ -1,7 +1,7 @@
 export default class Num implements Expr, Diffible<Num, Num> {
   #value: number
 
-  declare exprBrand: never
+  declare _exprBrand: never
 
   constructor(value: number) {
     this.#value = value

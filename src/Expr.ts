@@ -1,3 +1,3 @@
 interface Expr {
-  exprBrand: never // TODO: Delete
+  _exprBrand: never // TODO: Delete
 }

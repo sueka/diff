@@ -3,7 +3,7 @@ import Num from './Num'
 export default class Var implements Expr, Diffible<Var, Num> {
   #letter: string
 
-  declare exprBrand: never
+  declare _exprBrand: never
 
   constructor(letter: string) {
     this.#letter = letter
