@@ -5,7 +5,7 @@ export default class Num implements Diffible<Num, Num> {
     this.#value = value
   }
 
-  toString() {
+  toString(): string {
     return this.#value.toString()
   }
 

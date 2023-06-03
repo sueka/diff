@@ -7,7 +7,7 @@ export default class Var implements Diffible<Var, Num> {
     this.#letter = letter
   }
 
-  toString() {
+  toString(): string {
     return this.#letter
   }
 
