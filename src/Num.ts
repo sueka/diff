@@ -1,5 +1,7 @@
-export default class Num implements Diffible<Num, Num> {
+export default class Num implements Expr, Diffible<Num, Num> {
   #value: number
+
+  declare exprBrand: never
 
   constructor(value: number) {
     this.#value = value

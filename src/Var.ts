@@ -1,7 +1,9 @@
 import Num from './Num'
 
-export default class Var implements Diffible<Var, Num> {
+export default class Var implements Expr, Diffible<Var, Num> {
   #letter: string
+
+  declare exprBrand: never
 
   constructor(letter: string) {
     this.#letter = letter

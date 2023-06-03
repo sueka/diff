@@ -1,3 +1,3 @@
-interface Diffible<T, U> {
+interface Diffible<T extends Expr, U extends Expr> {
   diff(this: T): U
 }
