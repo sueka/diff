@@ -1,13 +1,17 @@
-export default class Num implements Expr, Diffible<Num, Num> {
+import HashableEq from './HashableEq'
+
+export default class Num extends HashableEq implements Expr, Diffible<Num, Num> {
   #value: number
 
   declare _exprBrand: never
 
   constructor(value: number) {
+    super()
+
     this.#value = value
   }
 
-  toString(): string {
+  override toString(): string {
     return this.#value.toString()
   }
 
@@ -15,7 +19,7 @@ export default class Num implements Expr, Diffible<Num, Num> {
     return new Num(0)
   }
 
-  equals(this: this, that: this): boolean {
-    return this.#value === that.#value
+  hashCode() {
+    return this.#value
   }
 }
