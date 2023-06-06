@@ -1,6 +1,6 @@
 {
   "name": "diff",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A Differentiation DSL",
   "main": "dist/index.js",
   "scripts": {
