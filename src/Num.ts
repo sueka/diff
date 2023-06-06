@@ -1,4 +1,5 @@
 import HashableEq from './HashableEq'
+import doubleToLongBits from './doubleToLongBits'
 
 export default class Num extends HashableEq implements Expr, Diffible<Num, Num> {
   #value: number
@@ -20,6 +21,8 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
   }
 
   hashCode() {
-    return this.#value
-  }
+    const v = doubleToLongBits(this.#value)
+
+    return Number(v & BigInt(0xFFFFFFFF)) ^ Number(v >> BigInt(32))
+    }
 }
