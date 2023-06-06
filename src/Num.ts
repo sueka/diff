@@ -24,5 +24,5 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
     const v = doubleToLongBits(this.#value)
 
     return Number(v & BigInt(0xFFFFFFFF)) ^ Number(v >> BigInt(32))
-    }
+  }
 }
