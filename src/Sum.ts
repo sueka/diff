@@ -1,5 +1,6 @@
 import HashableEq from './HashableEq'
 import Num from './Num'
+import Zero from './Zero'
 import canDiff from './canDiff'
 
 export default class Sum<
@@ -23,7 +24,19 @@ implements Expr, Diffible<
     this.#right = right
   }
 
+  static of<T>(left: T, right: Zero): T
+  static of<U>(left: Zero, right: U): U
+  static of<T extends Expr, U extends Expr>(left: T, right: U): Sum<T, U>
+
   static of<T extends Expr, U extends Expr>(left: T, right: U) {
+    if (Zero.isZero(right)) {
+      return left
+    }
+
+    if (Zero.isZero(left)) {
+      return right
+    }
+
     return new Sum(left, right)
   }
 
