@@ -1,0 +1,63 @@
+import HashableEq from './HashableEq'
+import Num from './Num'
+import canDiff from './canDiff'
+
+export default class Sum<
+  T extends Expr,
+  U extends Expr
+>
+extends HashableEq
+implements Expr, Diffible<
+  Sum<T, U>,
+  DerivOf<T> | DerivOf<U> | Sum<DerivOf<T>, DerivOf<U>>
+> {
+  #left: T
+  #right: U
+
+  declare _exprBrand: never
+
+  constructor(left: T, right: U) {
+    super()
+
+    this.#left = left
+    this.#right = right
+  }
+
+  override toString(): string {
+    return `${ this.#left } + ${ this.#right }`
+  }
+
+  diff(this: Sum<T, Num>): DerivOf<T>
+  diff(this: Sum<Num, U>): DerivOf<U>
+  diff(): Sum<DerivOf<T>, DerivOf<U>>
+
+  diff(): DerivOf<T> | DerivOf<U> | Sum<DerivOf<T>, DerivOf<U>> {
+    if (this.#left instanceof Num && canDiff(this.#right)) {
+      return this.#right.diff()
+    }
+
+    if (canDiff(this.#left) && this.#right instanceof Num) {
+      return this.#left.diff()
+    }
+
+    if (canDiff(this.#left) && canDiff(this.#right)) {
+      return new Sum(
+        this.#left.diff(),
+        this.#right.diff()
+      )
+    }
+
+    throw new Error
+  }
+
+  hashCode() {
+    let l = this.#left.hashCode()
+    let r = this.#right.hashCode()
+
+    if (l > r) {
+      ;[r, l] = [l, r]
+    }
+
+    return 43 * l + r
+  }
+}

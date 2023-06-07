@@ -1,4 +1,5 @@
 import Num from './Num'
+import Sum from './Sum'
 import Var from './Var'
 
 describe('Diffible', () => {
@@ -12,5 +13,9 @@ describe('Diffible', () => {
 
   test('The derivative of Var is one', () => {
     expect(x.diff().equals(new Num(1))).toBe(true)
+  })
+
+  test('The derivative of Sum is Sum of the derivatives of the summands', () => {
+    expect(new Sum(x, two).diff().equals(new Sum(x.diff(), two.diff())))
   })
 })
