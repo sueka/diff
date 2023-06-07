@@ -1,4 +1,5 @@
 import HashableEq from './HashableEq'
+import Zero from './Zero'
 import doubleToLongBits from './doubleToLongBits'
 
 export default class Num extends HashableEq implements Expr, Diffible<Num, Num> {
@@ -6,13 +7,20 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
 
   declare _exprBrand: never
 
-  private constructor(value: number) {
+  protected constructor(value: number) {
     super()
 
     this.#value = value
   }
 
+  static of(value: 0): Zero
+  static of(value: number): Num
+
   static of(value: number) {
+    if (value === 0) {
+      return Zero.instance
+    }
+
     return new Num(value)
   }
 
