@@ -16,11 +16,15 @@ implements Expr, Diffible<
 
   declare _exprBrand: never
 
-  constructor(left: T, right: U) {
+  private constructor(left: T, right: U) {
     super()
 
     this.#left = left
     this.#right = right
+  }
+
+  static of<T extends Expr, U extends Expr>(left: T, right: U) {
+    return new Sum(left, right)
   }
 
   override toString(): string {

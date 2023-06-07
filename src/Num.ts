@@ -6,10 +6,14 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
 
   declare _exprBrand: never
 
-  constructor(value: number) {
+  private constructor(value: number) {
     super()
 
     this.#value = value
+  }
+
+  static of(value: number) {
+    return new Num(value)
   }
 
   override toString(): string {

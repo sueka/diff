@@ -6,10 +6,14 @@ export default class Var extends HashableEq implements Expr, Diffible<Var, Num> 
 
   declare _exprBrand: never
 
-  constructor(letter: string) {
+  private constructor(letter: string) {
     super()
 
     this.#letter = letter
+  }
+
+  static of(letter: string) {
+    return new Var(letter)
   }
 
   override toString(): string {
@@ -17,7 +21,7 @@ export default class Var extends HashableEq implements Expr, Diffible<Var, Num> 
   }
 
   diff() {
-    return new Num(1)
+    return Num.of(1)
   }
 
   hashCode() {
