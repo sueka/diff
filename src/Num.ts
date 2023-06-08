@@ -28,7 +28,7 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
   }
 
   diff() {
-    return new Num(0)
+    return Zero.instance
   }
 
   hashCode() {
