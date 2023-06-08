@@ -41,12 +41,25 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
 export class Zero extends Num {
   #brand: any
 
-  static override of(_value: 0) {
-    return new Num(0) as Zero
+  static #instance?: Zero
+
+  private constructor() {
+    super(0)
   }
 
-  static get instance() {
-    return new Num(0)
+  static override of(value: 0): Zero
+  static override of(): Zero
+
+  static override of(_value: 0 = 0) {
+    return Zero.instance
+  }
+
+  static get instance(): Zero {
+    if (Zero.#instance === undefined) {
+      Zero.#instance = new Zero
+    }
+
+    return Zero.#instance
   }
 
   static isZero(expr: Expr): expr is Zero {
