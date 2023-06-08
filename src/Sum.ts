@@ -47,6 +47,7 @@ implements Expr, Diffible<
   diff(this: Sum<Num, U>): DerivOf<U>
   diff(): Sum<DerivOf<T>, DerivOf<U>>
 
+  // TODO: Make it work well even if #left and/or #right are non-differentiable. f(x) + g(x) may be differentiable even though f(x) and g(x) are both non-differentiable with respect to any x. It is trivial if f(x) is the Dirichlet function and g(x) := -f(x).
   diff(): DerivOf<T> | DerivOf<U> | Sum<DerivOf<T>, DerivOf<U>> {
     if (this.#left instanceof Num && canDiff(this.#right)) {
       return this.#right.diff()
