@@ -1,5 +1,4 @@
 import HashableEq from './HashableEq'
-import Zero from './Zero'
 import doubleToLongBits from './doubleToLongBits'
 
 export default class Num extends HashableEq implements Expr, Diffible<Num, Num> {
@@ -36,5 +35,21 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num> 
     const v = doubleToLongBits(this.#value)
 
     return Number(v & BigInt(0xFFFFFFFF)) ^ Number(v >> BigInt(32))
+  }
+}
+
+export class Zero extends Num {
+  #brand: any
+
+  static override of(_value: 0) {
+    return new Num(0) as Zero
+  }
+
+  static get instance() {
+    return new Num(0)
+  }
+
+  static isZero(expr: Expr): expr is Zero {
+    return #brand in expr // || expr instanceof Num && expr.equals(Zero.instance)
   }
 }

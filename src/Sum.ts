@@ -1,6 +1,5 @@
 import HashableEq from './HashableEq'
-import Num from './Num'
-import Zero from './Zero'
+import Num, { Zero } from './Num'
 import canDiff from './canDiff'
 
 export default class Sum<
