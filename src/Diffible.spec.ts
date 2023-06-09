@@ -19,6 +19,6 @@ describe('Diffible', () => {
 
   test('The derivative of Sum is Sum of the derivatives of the summands', () => {
     expect(Sum.of(x, two).diff().toString()).toBe('1')
-    expect(Sum.of(x, two).diff().equals(Sum.of(x.diff(), two.diff())))
+    expect(Sum.of(x, two).diff().equals(Sum.of(x.diff(), two.diff()))).toBe(true)
   })
 })
