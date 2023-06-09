@@ -40,7 +40,7 @@ implements Expr, Diffible<
   }
 
   override toString(): string {
-    return `${ this.#left } + ${ this.#right }`
+    return `(${ this.#left } + ${ this.#right })`
   }
 
   diff(this: Sum<T, Num>): DerivOf<T>
