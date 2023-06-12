@@ -30,5 +30,6 @@ describe('Diffible', () => {
 
     // // x^2 -> 2x = x + x
     // expect(Product.of(x, x).diff().equals(Product.of(two, x))).toBe(true)
+    expect(Product.of(x, x).diff().equals(Sum.of(x, x))).toBe(true)
   })
 })
