@@ -20,13 +20,9 @@ implements Expr, Diffible<
   | Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
   ,
   | Num
-  | Product<Num, PartialDerivOf<U>>
-  | Product<PartialDerivOf<T>, Num>
   | Sum<Product<Var, PartialDerivOf<U>>, U>
-  | Product<Var, PartialDerivOf<U>>
   | U
   | Sum<T, Product<PartialDerivOf<T>, Var>>
-  | Product<PartialDerivOf<T>, Var>
   | T
   | Sum<Product<T, PartialDerivOf<U>>, Product<PartialDerivOf<T>, U>>
   | Product<T, PartialDerivOf<U>>
@@ -106,18 +102,11 @@ implements Expr, Diffible<
   grad<S extends I, I extends string>(this: Product<Num, Var<I>>, variable: Var<S>): Num
   grad<S extends I, I extends string>(this: Product<Var<I>, Num>, variable: Var<S>): Num
 
-  // (2 f(x, y))_x -> 2 f(x, y)_x
-  grad<S extends I, I extends VarOf<U>>(this: Product<Num, U>, variable: Var<S>): Product<Num, PartialDerivOf<U, S>>
-  grad<S extends I, I extends VarOf<T>>(this: Product<T, Num>, variable: Var<S>): Product<PartialDerivOf<T, S>, Num>
-
   // (x f(x, y))_x -> x f(x, y)_x + f(x, y)
-  // (x f(x, y))_y -> x f(x, y)_y
   // (x f(y, z))_x -> f(y, z)
   grad<S extends I & J, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): Sum<Product<Var, PartialDerivOf<U, S>>, U>
-  grad<S extends Exclude<J, I>, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): Product<Var, PartialDerivOf<U, S>>
   grad<S extends Exclude<I, J>, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): U
   grad<S extends I & J, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): Sum<T, Product<PartialDerivOf<T, S>, Var>>
-  grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): Product<PartialDerivOf<T, S>, Var>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): T
 
   // Leibniz rules:
@@ -132,13 +121,9 @@ implements Expr, Diffible<
 
   grad(variable: Var):
   | Num
-  | Product<Num, PartialDerivOf<U>>
-  | Product<PartialDerivOf<T>, Num>
   | Sum<Product<Var, PartialDerivOf<U>>, U>
-  | Product<Var, PartialDerivOf<U>>
   | U
   | Sum<T, Product<PartialDerivOf<T>, Var>>
-  | Product<PartialDerivOf<T>, Var>
   | T
   | Sum<Product<T, PartialDerivOf<U>>, Product<PartialDerivOf<T>, U>>
   | Product<T, PartialDerivOf<U>>
