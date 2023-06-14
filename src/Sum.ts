@@ -72,10 +72,17 @@ implements Expr, Diffible<
     throw new Error
   }
 
+  // (f(x, y) + g(y, z))_y -> f(x, y)_y + g(y, z)_y
+  // (f(x, y) + g(y, z))_x -> f(x, y)_x
+  // (f(x, y) + g(y, z))_z -> g(y, z)_z
+  // (f(x, y) + g(y, z))_k -> 0
   grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): Sum<PartialDerivOf<T, S>, PartialDerivOf<U, S>>
   grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<T, S>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<U, S>
-  grad(variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+
+  // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+  // NOTE: If `this` is omitted, it may be chosen in preference to other overloads.
+  grad(this: Sum<T, U>, variable: Var): Zero
 
   grad(variable: Var):
   | Sum<PartialDerivOf<T>, PartialDerivOf<U>>
