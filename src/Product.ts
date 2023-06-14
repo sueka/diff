@@ -19,7 +19,6 @@ implements Expr, Diffible<
   | Sum<T, Product<DerivOf<T>, Var>>
   | Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
   ,
-  | Num
   | Sum<Product<Var, PartialDerivOf<U>>, U>
   | U
   | Sum<T, Product<PartialDerivOf<T>, Var>>
@@ -119,7 +118,6 @@ implements Expr, Diffible<
   grad(this: Product<T, U>, variable: Var): Zero
 
   grad(variable: Var):
-  | Num
   | Sum<Product<Var, PartialDerivOf<U>>, U>
   | U
   | Sum<T, Product<PartialDerivOf<T>, Var>>
