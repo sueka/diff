@@ -12,7 +12,8 @@ export default class Product<
 extends HashableEq
 implements Expr, Diffible<
   Product<T, U>,
-  Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
+  Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>,
+  Sum<Product<T, U | PartialDerivOf<U>>, Product<T | PartialDerivOf<T>, U>>
 > {
   #left: T
   #right: U
@@ -55,6 +56,17 @@ implements Expr, Diffible<
       return Sum.of(
         Product.of(this.#left, this.#right.diff()),
         Product.of(this.#left.diff(), this.#right),
+      )
+    }
+
+    throw new Error
+  }
+
+  grad<S extends string>(variable: Var<string>): Sum<Product<T, U | PartialDerivOf<U>>, Product<T | PartialDerivOf<T>, U>> {
+    if (canDiff(this.#left) && canDiff(this.#right)) {
+      return Sum.of(
+        Product.of(this.#left, this.#right.grad(variable)),
+        Product.of(this.#left.grad(variable), this.#right)
       )
     }
 

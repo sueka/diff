@@ -1,7 +1,7 @@
 import HashableEq from './HashableEq'
 import Num from './Num'
 
-export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, Num> {
+export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, Num, Num> {
   #text: S
 
   declare _exprBrand: never
@@ -22,6 +22,14 @@ export default class Var<S extends string = string> extends HashableEq implement
 
   diff() {
     return Num.of(1)
+  }
+
+  grad<T extends string>(variable: Var<T>) {
+    if (variable.equals(this)) {
+      return Num.of(1)
+    }
+
+    return Num.of(0)
   }
 
   hashCode() {

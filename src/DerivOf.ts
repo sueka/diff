@@ -1,4 +1,4 @@
-type DerivOf<F, V extends string = string> =
-  F extends Diffible<infer P, infer D> ?
-  VarOf<P> extends V ? D : P :
+type DerivOf<F, V extends VarOf<F> = VarOf<F>> =
+  F extends Diffible<infer P, infer D, any> ?
+  VarOf<F> extends V ? D : P :
   never

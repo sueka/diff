@@ -1,5 +1,6 @@
 import HashableEq from './HashableEq'
 import Num, { Zero } from './Num'
+import Var from './Var'
 import canDiff from './canDiff'
 
 export default class Sum<
@@ -10,7 +11,8 @@ export default class Sum<
 extends HashableEq
 implements Expr, Diffible<
   Sum<T, U>,
-  Sum<DerivOf<T>, DerivOf<U>>
+  Sum<DerivOf<T>, DerivOf<U>>,
+  Sum<T | PartialDerivOf<T>, U | PartialDerivOf<U>>
 > {
   #left: T
   #right: U
@@ -50,6 +52,17 @@ implements Expr, Diffible<
       return Sum.of(
         this.#left.diff(),
         this.#right.diff()
+      )
+    }
+
+    throw new Error
+  }
+
+  grad<S extends string>(variable: Var<string>): Sum<T | PartialDerivOf<T>, U | PartialDerivOf<U>> {
+    if (canDiff(this.#left) && canDiff(this.#right)) {
+      return Sum.of(
+        this.#left.grad(variable),
+        this.#right.grad(variable)
       )
     }
 
