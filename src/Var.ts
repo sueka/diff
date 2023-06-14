@@ -1,18 +1,18 @@
 import HashableEq from './HashableEq'
 import Num, { One, Zero } from './Num'
 
-export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, One, One | Zero> {
-  #text: S
+export default class Var<T extends string = string> extends HashableEq implements Expr, Diffible<Var<T>, One, One | Zero> {
+  #text: T
 
   declare _exprBrand: never
 
-  private constructor(text: S) {
+  private constructor(text: T) {
     super()
 
     this.#text = text
   }
 
-  static of<S extends string>(text: S) {
+  static of<T extends string>(text: T) {
     return new Var(text)
   }
 
@@ -24,7 +24,10 @@ export default class Var<S extends string = string> extends HashableEq implement
     return Num.of(1)
   }
 
-  grad<T extends string>(variable: Var<T>) {
+  grad<S extends T>(variable: Var<S>): One
+  grad(variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+
+  grad(variable: Var) {
     if (variable.equals(this)) {
       return Num.of(1)
     }
