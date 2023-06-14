@@ -1,23 +1,23 @@
 import HashableEq from './HashableEq'
 import Num from './Num'
 
-export default class Var<T extends string = string> extends HashableEq implements Expr, Diffible<Var<T>, Num> {
-  #letter: T
+export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, Num> {
+  #text: S
 
   declare _exprBrand: never
 
-  private constructor(letter: T) {
+  private constructor(text: S) {
     super()
 
-    this.#letter = letter
+    this.#text = text
   }
 
-  static of<T extends string>(letter: T) {
-    return new Var(letter)
+  static of<S extends string>(text: S) {
+    return new Var(text)
   }
 
   override toString(): string {
-    return this.#letter
+    return this.#text
   }
 
   diff() {
@@ -27,8 +27,8 @@ export default class Var<T extends string = string> extends HashableEq implement
   hashCode() {
     let result = 0
 
-    for (let i = 0; i < this.#letter.length; ++i) {
-      result = 31 * result + this.#letter.charCodeAt(i)
+    for (let i = 0; i < this.#text.length; ++i) {
+      result = 31 * result + this.#text.charCodeAt(i)
     }
 
     return result
