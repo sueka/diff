@@ -1,18 +1,18 @@
 import HashableEq from './HashableEq'
 import Num from './Num'
 
-export default class Var extends HashableEq implements Expr, Diffible<Var, Num> {
-  #letter: string
+export default class Var<T extends string = string> extends HashableEq implements Expr, Diffible<Var<T>, Num> {
+  #letter: T
 
   declare _exprBrand: never
 
-  private constructor(letter: string) {
+  private constructor(letter: T) {
     super()
 
     this.#letter = letter
   }
 
-  static of(letter: string) {
+  static of<T extends string>(letter: T) {
     return new Var(letter)
   }
 
