@@ -12,7 +12,7 @@ extends HashableEq
 implements Expr, Diffible<
   Sum<T, U>,
   Sum<DerivOf<T>, DerivOf<U>>,
-  Sum<T | PartialDerivOf<T>, U | PartialDerivOf<U>>
+  Sum<PartialDerivOf<T>, PartialDerivOf<U>>
 > {
   #left: T
   #right: U
@@ -58,7 +58,7 @@ implements Expr, Diffible<
     throw new Error
   }
 
-  grad<S extends string>(variable: Var<string>): Sum<T | PartialDerivOf<T>, U | PartialDerivOf<U>> {
+  grad<S extends string>(variable: Var<string>): Sum<PartialDerivOf<T>, PartialDerivOf<U>> {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
         this.#left.grad(variable),
