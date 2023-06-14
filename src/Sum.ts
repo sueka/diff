@@ -72,10 +72,10 @@ implements Expr, Diffible<
     throw new Error
   }
 
-  // (f(x, y) + g(y, z))_y -> f(x, y)_y + g(y, z)_y
-  // (f(x, y) + g(y, z))_x -> f(x, y)_x
-  // (f(x, y) + g(y, z))_z -> g(y, z)_z
-  // (f(x, y) + g(y, z))_k -> 0
+  // (f(x, y) + g(z, x))_x -> f(x, y)_x + g(z, x)_x
+  // (f(x, y) + g(z, x))_y -> f(x, y)_y
+  // (f(x, y) + g(z, x))_z -> g(z, x)_z
+  // (f(x, y) + g(z, x))_k -> 0
   grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): Sum<PartialDerivOf<T, S>, PartialDerivOf<U, S>>
   grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<T, S>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<U, S>

@@ -106,11 +106,11 @@ implements Expr, Diffible<
   grad<S extends I & J, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): Sum<T, Product<PartialDerivOf<T, S>, Var<J>>>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): T
 
-  // Leibniz rules:
-  // (f(x, y) g(y, z))_y -> f(x, y) g(y, z)_y + f(x, y)_y g(y, z)
-  // (f(x, y) g(y, z))_x -> f(x, y)_x g(y, z)
-  // (f(x, y) g(y, z))_z -> f(x, y) g(y, z)_z
-  // (f(x, y) g(y, z))_k -> 0
+  // Leibniz rule:
+  // (f(x, y) g(z, x))_x -> f(x, y) g(z, x)_x + f(x, y)_x g(z, x)
+  // (f(x, y) g(z, x))_y -> f(x, y)_y g(z, x)
+  // (f(x, y) g(z, x))_z -> f(x, y) g(z, x)_z
+  // (f(x, y) g(z, x))_k -> 0
   grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Sum<Product<T, PartialDerivOf<U, S>>, Product<PartialDerivOf<T, S>, U>>
   grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Product<PartialDerivOf<T, S>, U>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Product<T, PartialDerivOf<U, S>>
