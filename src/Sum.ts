@@ -72,12 +72,10 @@ implements Expr, Diffible<
     throw new Error
   }
 
-  // grad<S extends I, I extends VarOf<T>>(this: Sum<T, Num>, variable: Var<S>): PartialDerivOf<T, S>
-  // grad<S extends J, J extends VarOf<U>>(this: Sum<Num, U>, variable: Var<S>): PartialDerivOf<U, S>
   grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): Sum<PartialDerivOf<T, S>, PartialDerivOf<U, S>>
   grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<T, S>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<U, S>
-  grad(this: Sum<T, U>, variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+  grad(variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
 
   grad(variable: Var):
   | Sum<PartialDerivOf<T>, PartialDerivOf<U>>

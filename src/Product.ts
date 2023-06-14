@@ -99,7 +99,7 @@ implements Expr, Diffible<
   }
 
   // (2x)_x = 2
-  grad<S extends I, I extends string>(this: Product<Num, Var<I>>, variable: Var<S>): Num
+  grad<S extends J, J extends string>(this: Product<Num, Var<J>>, variable: Var<S>): Num
   grad<S extends I, I extends string>(this: Product<Var<I>, Num>, variable: Var<S>): Num
 
   // (x f(x, y))_x -> x f(x, y)_x + f(x, y)
@@ -117,7 +117,7 @@ implements Expr, Diffible<
   grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Sum<Product<T, PartialDerivOf<U, S>>, Product<PartialDerivOf<T, S>, U>>
   grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Product<PartialDerivOf<T, S>, U>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Product<T, U>, variable: Var<S>): Product<T, PartialDerivOf<U, S>>
-  grad(this: Product<T, U>, variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+  grad(variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
 
   grad(variable: Var):
   | Num
