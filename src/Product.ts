@@ -12,7 +12,7 @@ export default class Product<
 extends HashableEq
 implements Expr, Diffible<
   Product<T, U>,
-  | Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
+  Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
 > {
   #left: T
   #right: U
@@ -50,29 +50,7 @@ implements Expr, Diffible<
     return `${ this.#left } * ${ this.#right }`
   }
 
-  // (2x)' = 2
-  diff(this: Product<Num, Var>): Num
-  diff(this: Product<Var, Num>): Num
-
-  // (2 f(x))' -> 2 f'(x)
-  diff(this: Product<Num, U>): Product<Num, DerivOf<U>>
-  diff(this: Product<T, Num>): Product<DerivOf<T>, Num>
-
-  // (x f(x))' -> x f'(x) + f(x)
-  diff(this: Product<Var, U>): Sum<Product<Var, DerivOf<U>>, U>
-  diff(this: Product<T, Var>): Sum<T, Product<DerivOf<T>, Var>>
-
-  // Leibniz rule: (f(x) g(x))' -> f(x) g'(x) + f'(x) g(x)
-  diff(): Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
-
-  diff():
-  | Num
-  | Product<Num, DerivOf<U>>
-  | Product<DerivOf<T>, Num>
-  | Sum<Product<Var, DerivOf<U>>, U>
-  | Sum<T, Product<DerivOf<T>, Var>>
-  | Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
-  {
+  diff(): Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>> {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
         Product.of(this.#left, this.#right.diff()),
