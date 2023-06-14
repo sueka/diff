@@ -1,1 +1,4 @@
-type DerivOf<T> = T extends Diffible<any, infer U> ? U : never
+type DerivOf<E, V extends string = string> =
+  E extends Diffible<infer T, infer U> ?
+  VarOf<T> extends V ? U : T :
+  never

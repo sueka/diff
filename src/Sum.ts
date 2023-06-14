@@ -4,7 +4,8 @@ import canDiff from './canDiff'
 
 export default class Sum<
   T extends Expr,
-  U extends Expr
+  U extends Expr,
+  _V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
 implements Expr, Diffible<
