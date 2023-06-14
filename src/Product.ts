@@ -104,9 +104,9 @@ implements Expr, Diffible<
 
   // (x f(x, y))_x -> x f(x, y)_x + f(x, y)
   // (x f(y, z))_x -> f(y, z)
-  grad<S extends I & J, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): Sum<Product<Var, PartialDerivOf<U, S>>, U>
+  grad<S extends I & J, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): Sum<Product<Var<I>, PartialDerivOf<U, S>>, U>
   grad<S extends Exclude<I, J>, I extends string, J extends VarOf<U>>(this: Product<Var<I>, U>, variable: Var<S>): U
-  grad<S extends I & J, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): Sum<T, Product<PartialDerivOf<T, S>, Var>>
+  grad<S extends I & J, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): Sum<T, Product<PartialDerivOf<T, S>, Var<J>>>
   grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends string>(this: Product<T, Var<J>>, variable: Var<S>): T
 
   // Leibniz rules:
