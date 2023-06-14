@@ -3,7 +3,7 @@ import HashableEq from './HashableEq'
 import Var from './Var'
 import doubleToLongBits from './doubleToLongBits'
 
-export default class Num extends HashableEq implements Expr, Diffible<Num, Num, Num> {
+export default class Num extends HashableEq implements Expr, Diffible<Num, Zero, Zero> {
   #value: number
 
   declare _exprBrand: never
@@ -38,7 +38,7 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Num, 
     return Zero.instance
   }
 
-  grad(_var?: Var<string>) {
+  grad(_var?: Var) {
     return Zero.instance
   }
 

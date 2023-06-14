@@ -11,8 +11,14 @@ export default class Sum<
 extends HashableEq
 implements Expr, Diffible<
   Sum<T, U>,
-  Sum<DerivOf<T>, DerivOf<U>>,
-  Sum<PartialDerivOf<T>, PartialDerivOf<U>>
+  | DerivOf<T>
+  | DerivOf<U>
+  | Sum<DerivOf<T>, DerivOf<U>>
+  ,
+  | Sum<PartialDerivOf<T>, PartialDerivOf<U>>
+  | PartialDerivOf<T>
+  | PartialDerivOf<U>
+  | Zero
 > {
   #left: T
   #right: U
@@ -46,8 +52,16 @@ implements Expr, Diffible<
     return `(${ this.#left } + ${ this.#right })`
   }
 
+  diff(this: Sum<T, Num>): DerivOf<T>
+  diff(this: Sum<Num, U>): DerivOf<U>
+  diff(): Sum<DerivOf<T>, DerivOf<U>>
+
   // TODO: Make it work well even if #left and/or #right are non-differentiable. f(x) + g(x) may be differentiable even though f(x) and g(x) are both non-differentiable with respect to any x. It is trivial if f(x) is the Dirichlet function and g(x) := -f(x).
-  diff(): Sum<DerivOf<T>, DerivOf<U>> {
+  diff():
+  | DerivOf<T>
+  | DerivOf<U>
+  | Sum<DerivOf<T>, DerivOf<U>>
+  {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
         this.#left.diff(),
@@ -58,7 +72,19 @@ implements Expr, Diffible<
     throw new Error
   }
 
-  grad<S extends string>(variable: Var<string>): Sum<PartialDerivOf<T>, PartialDerivOf<U>> {
+  // grad<S extends I, I extends VarOf<T>>(this: Sum<T, Num>, variable: Var<S>): PartialDerivOf<T, S>
+  // grad<S extends J, J extends VarOf<U>>(this: Sum<Num, U>, variable: Var<S>): PartialDerivOf<U, S>
+  grad<S extends I & J, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): Sum<PartialDerivOf<T, S>, PartialDerivOf<U, S>>
+  grad<S extends Exclude<I, J>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<T, S>
+  grad<S extends Exclude<J, I>, I extends VarOf<T>, J extends VarOf<U>>(this: Sum<T, U>, variable: Var<S>): PartialDerivOf<U, S>
+  grad(this: Sum<T, U>, variable: Var): Zero // NOTE: It must be at the bottom, and `S` of the `grad()` overloads above it must be appropriately bounded.
+
+  grad(variable: Var):
+  | Sum<PartialDerivOf<T>, PartialDerivOf<U>>
+  | PartialDerivOf<T>
+  | PartialDerivOf<U>
+  | Zero
+  {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
         this.#left.grad(variable),

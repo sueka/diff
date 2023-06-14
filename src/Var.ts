@@ -1,7 +1,7 @@
 import HashableEq from './HashableEq'
-import Num from './Num'
+import Num, { One, Zero } from './Num'
 
-export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, Num, Num> {
+export default class Var<S extends string = string> extends HashableEq implements Expr, Diffible<Var<S>, One, One | Zero> {
   #text: S
 
   declare _exprBrand: never
