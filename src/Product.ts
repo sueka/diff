@@ -40,8 +40,8 @@ implements Expr, Diffible<
     this.#right = right
   }
 
-  static of<T>(left: T, right: Zero): Zero
-  static of<U>(left: Zero, right: U): Zero
+  static of(left: unknown, right: Zero): Zero
+  static of(left: Zero, right: unknown): Zero
   static of<T>(left: T, right: One): T
   static of<U>(left: One, right: U): U
   static of<T extends Expr, U extends Expr>(left: T, right: U): Product<T, U>
