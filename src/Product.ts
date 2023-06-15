@@ -44,6 +44,7 @@ implements Expr, Diffible<
   static of(left: Zero, right: unknown): Zero
   static of<T>(left: T, right: One): T
   static of<U>(left: One, right: U): U
+  static of(left: Num, right: Num): Num
   static of<T extends Expr, U extends Expr>(left: T, right: U): Product<T, U>
 
   static of<T extends Expr, U extends Expr>(left: T, right: U) {
@@ -57,6 +58,10 @@ implements Expr, Diffible<
 
     if (One.isOne(left)) {
       return right
+    }
+
+    if (left instanceof Num && right instanceof Num) {
+      return Num.of(left.value * right.value)
     }
 
     return new Product(left, right)

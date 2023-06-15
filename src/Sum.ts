@@ -34,6 +34,7 @@ implements Expr, Diffible<
 
   static of<T>(left: T, right: Zero): T
   static of<U>(left: Zero, right: U): U
+  static of(left: Num, right: Num): Num
   static of<T extends Expr, U extends Expr>(left: T, right: U): Sum<T, U>
 
   static of<T extends Expr, U extends Expr>(left: T, right: U) {
@@ -43,6 +44,10 @@ implements Expr, Diffible<
 
     if (Zero.isZero(left)) {
       return right
+    }
+
+    if (left instanceof Num && right instanceof Num) {
+      return Num.of(left.value + right.value)
     }
 
     return new Sum(left, right)

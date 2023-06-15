@@ -6,6 +6,10 @@ import doubleToLongBits from './doubleToLongBits'
 export default class Num extends HashableEq implements Expr, Diffible<Num, Zero, Zero> {
   #value: number
 
+  get value() {
+    return this.#value
+  }
+
   declare _exprBrand: never
 
   protected constructor(value: number) {
