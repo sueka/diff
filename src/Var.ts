@@ -20,6 +20,14 @@ export default class Var<T extends string = string> extends HashableEq implement
     return this.#text
   }
 
+  degree(variable = this) {
+    if (variable.equals(this)) {
+      return 1
+    }
+
+    return 0
+  }
+
   diff() {
     return Num.of(1)
   }

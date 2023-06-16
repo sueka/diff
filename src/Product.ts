@@ -7,7 +7,7 @@ import canDiff from './canDiff'
 export default class Product<
   T extends Expr,
   U extends Expr,
-  _V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
+  V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
 implements Expr, Diffible<
@@ -69,6 +69,13 @@ implements Expr, Diffible<
 
   override toString(): string {
     return `${ this.#left } * ${ this.#right }`
+  }
+
+  degree(variable?: Var<V>): number {
+    const l = this.#left.degree(variable)
+    const r = this.#right.degree(variable)
+
+    return l + r
   }
 
   // (2x)' = 2

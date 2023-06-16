@@ -38,6 +38,10 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Zero,
     return this.#value.toString()
   }
 
+  degree() {
+    return 0
+  }
+
   diff() {
     return Zero.instance
   }
