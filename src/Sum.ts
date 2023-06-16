@@ -57,6 +57,24 @@ implements Expr, Diffible<
     return `(${ this.#left } + ${ this.#right })`
   }
 
+  private summands(): SummandsOf<this> {
+    const result = []
+
+    if (this.#left instanceof Sum) {
+      result.push(...this.#left.summands())
+    } else {
+      result.push(this.#left)
+    }
+
+    if (this.#right instanceof Sum) {
+      result.push(...this.#right.summands())
+    } else {
+      result.push(this.#right)
+    }
+
+    return result as SummandsOf<this>
+  }
+
   diff(this: Sum<T, Num>): DerivOf<T>
   diff(this: Sum<Num, U>): DerivOf<U>
   diff(): Sum<DerivOf<T>, DerivOf<U>>
