@@ -37,8 +37,24 @@ implements Expr, Diffible<
   static of<U>(left: Zero, right: U): U
   static of(left: Num, right: Num): Num
   static of<T extends Expr, U extends Expr>(left: T, right: U): Sum<T, U>
+  static of<TS extends Expr[]>(...summands: TS): Zero | Sum<Expr, TS[number]>
 
-  static of<T extends Expr, U extends Expr>(left: T, right: U) {
+  static of<T extends Expr, U extends Expr, TS extends Expr[]>(leftOrCar: T | TS[0], rightOrCadr: U | TS[1], ...cddr: Cdr<Cdr<TS>>) {
+    if (cddr.length === 0) {
+      const left = leftOrCar
+      const right = rightOrCadr
+
+      return this.ofTwo(left, right)
+    }
+
+    const car = leftOrCar
+    const cadr = rightOrCadr
+    const summands = [car, cadr, ...cddr] as TS
+
+    return this.ofSummands(...summands)
+  }
+
+  private static ofTwo<T extends Expr, U extends Expr>(left: T, right: U) {
     if (Zero.isZero(right)) {
       return left
     }
@@ -52,6 +68,19 @@ implements Expr, Diffible<
     }
 
     return new Sum(left, right)
+  }
+
+  static ofSummands<TS extends Expr[]>(...summands: TS): Zero | TS[number] | Sum<Expr, TS[number]> {
+    const nzSummands = summands.filter(summand => !Zero.isZero(summand)) as TS[number][]
+
+    switch (nzSummands.length) {
+      case 0: return Zero.instance
+      case 1: return nzSummands[0]!
+      default: return Sum.of(
+        Sum.of(...nzSummands.slice(0, -1)),
+        nzSummands.slice(-1)[0]!
+      )
+    }
   }
 
   override toString(): string {
