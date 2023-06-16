@@ -1,3 +1,4 @@
+import { Set } from 'immutable'
 import HashableEq from './HashableEq'
 import Num, { One, Zero } from './Num'
 import Sum from './Sum'
@@ -78,11 +79,11 @@ implements Expr, Diffible<
     return l + r
   }
 
-  vars(): Set<V> {
-    return new Set([
+  vars(): Set<Var<V>> {
+    return Set([
       ...this.#left.vars(),
       ...this.#right.vars(),
-    ] as V[])
+    ] as Var<V>[])
   }
 
   // (2x)' = 2

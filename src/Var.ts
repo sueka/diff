@@ -1,3 +1,4 @@
+import { Set } from 'immutable'
 import HashableEq from './HashableEq'
 import Num, { One, Zero } from './Num'
 
@@ -28,8 +29,8 @@ export default class Var<T extends string = string> extends HashableEq implement
     return 0
   }
 
-  vars(): Set<T> {
-    return new Set([this.#text])
+  vars(): Set<Var<T>> {
+    return Set([this])
   }
 
   diff() {

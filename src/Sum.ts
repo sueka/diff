@@ -1,3 +1,4 @@
+import { Set } from 'immutable'
 import HashableEq from './HashableEq'
 import Num, { Zero } from './Num'
 import Var from './Var'
@@ -82,11 +83,11 @@ implements Expr, Diffible<
     return result as SummandsOf<this>
   }
 
-  vars(): Set<V> {
-    return new Set([
+  vars(): Set<Var<V>> {
+    return Set([
       ...this.#left.vars(),
       ...this.#right.vars(),
-    ] as V[])
+    ] as Var<V>[])
   }
 
   diff(this: Sum<T, Num>): DerivOf<T>

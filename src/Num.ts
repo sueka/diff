@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { Set } from 'immutable'
 import HashableEq from './HashableEq'
 import Var from './Var'
 import doubleToLongBits from './doubleToLongBits'
@@ -43,7 +44,7 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Zero,
   }
 
   vars(): Set<never> {
-    return new Set
+    return Set()
   }
 
   diff() {
