@@ -82,6 +82,13 @@ implements Expr, Diffible<
     return result as SummandsOf<this>
   }
 
+  vars(): Set<V> {
+    return new Set([
+      ...this.#left.vars(),
+      ...this.#right.vars(),
+    ] as V[])
+  }
+
   diff(this: Sum<T, Num>): DerivOf<T>
   diff(this: Sum<Num, U>): DerivOf<U>
   diff(): Sum<DerivOf<T>, DerivOf<U>>

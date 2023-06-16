@@ -42,6 +42,10 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Zero,
     return 0
   }
 
+  vars(): Set<never> {
+    return new Set
+  }
+
   diff() {
     return Zero.instance
   }

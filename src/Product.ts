@@ -78,6 +78,13 @@ implements Expr, Diffible<
     return l + r
   }
 
+  vars(): Set<V> {
+    return new Set([
+      ...this.#left.vars(),
+      ...this.#right.vars(),
+    ] as V[])
+  }
+
   // (2x)' = 2
   diff(this: Product<Num, Var>): Num
   diff(this: Product<Var, Num>): Num

@@ -28,6 +28,10 @@ export default class Var<T extends string = string> extends HashableEq implement
     return 0
   }
 
+  vars(): Set<T> {
+    return new Set([this.#text])
+  }
+
   diff() {
     return Num.of(1)
   }
