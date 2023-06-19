@@ -1,6 +1,4 @@
-type HashableEq = import('./HashableEq').default
-
-interface Expr extends HashableEq {
+interface Expr extends Hashable, IEq {
   _exprBrand: never // TODO: Delete
   simple(): Expr
   degree(): number

@@ -1,7 +1,7 @@
 /**
  * @implNote When you override [[equals]], you must also override [[canEqual]].
  */
-export default abstract class Eq implements Eq {
+export default abstract class Eq implements IEq {
   /**
    * Returns whether `this` and `that` can be equal.
    *
