@@ -103,17 +103,17 @@ implements Expr, Diffible<
     return Math.max(l, r)
   }
 
-  private summands(): SummandsOf<this> {
+  #summands(): SummandsOf<this> {
     const result = []
 
     if (this.#left instanceof Sum) {
-      result.push(...this.#left.summands())
+      result.push(...this.#left.#summands())
     } else {
       result.push(this.#left)
     }
 
     if (this.#right instanceof Sum) {
-      result.push(...this.#right.summands())
+      result.push(...this.#right.#summands())
     } else {
       result.push(this.#right)
     }
