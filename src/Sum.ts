@@ -33,54 +33,63 @@ implements Expr, Diffible<
     this.#right = right
   }
 
-  static of<T>(left: T, right: Zero): T
-  static of<U>(left: Zero, right: U): U
-  static of(left: Num, right: Num): Num
-  static of<T extends Expr, U extends Expr>(left: T, right: U): Sum<T, U>
-  static of<TS extends Expr[]>(...summands: TS): Zero | Sum<Expr, TS[number]>
+  static of<T>(left: T, right: Zero, raw?: false): T
+  static of<U>(left: Zero, right: U, raw?: false): U
+  static of(left: Num, right: Num, raw?: false): Num
+  static of<T extends Expr, U extends Expr>(left: T, right: U, raw?: boolean): Sum<T, U>
 
-  static of<T extends Expr, U extends Expr, TS extends Expr[]>(leftOrCar: T | TS[0], rightOrCadr: U | TS[1], ...cddr: Cdr<Cdr<TS>>) {
-    if (cddr.length === 0) {
-      const left = leftOrCar
-      const right = rightOrCadr
-
-      return this.ofTwo(left, right)
+  static of<T extends Expr, U extends Expr>(left: T, right: U, raw = false):
+  // | T
+  // | U
+  | Num
+  | Sum<T, U>
+  {
+    if (raw) {
+      return new Sum(left, right)
     }
 
-    const car = leftOrCar
-    const cadr = rightOrCadr
-    const summands = [car, cadr, ...cddr] as TS
-
-    return this.ofSummands(...summands)
+    return new Sum(left, right).simple()
   }
 
-  private static ofTwo<T extends Expr, U extends Expr>(left: T, right: U) {
-    if (Zero.isZero(right)) {
-      return left
-    }
-
-    if (Zero.isZero(left)) {
-      return right
-    }
-
-    if (left instanceof Num && right instanceof Num) {
-      return Num.of(left.value + right.value)
-    }
-
-    return new Sum(left, right)
-  }
-
-  static ofSummands<TS extends Expr[]>(...summands: TS): Zero | TS[number] | Sum<Expr, TS[number]> {
+  static from<TS extends Expr[]>(...summands: TS): Zero | TS[number] | Sum<Expr, TS[number]> {
     const nzSummands = summands.filter(summand => !Zero.isZero(summand)) as TS[number][]
 
     switch (nzSummands.length) {
       case 0: return Zero.instance
       case 1: return nzSummands[0]!
       default: return Sum.of(
-        Sum.of(...nzSummands.slice(0, -1)),
+        Sum.from(...nzSummands.slice(0, -1)),
         nzSummands.slice(-1)[0]!
       )
     }
+  }
+
+  simple(this: Sum<T, Zero>): T
+  simple(this: Sum<Zero, U>): U
+  simple(this: Sum<Num, Num>): Num
+  simple(): this
+
+  simple() {
+    if (Zero.isZero(this.#right)) {
+      return this.#left.simple()
+    }
+
+    if (Zero.isZero(this.#left)) {
+      return this.#right.simple()
+    }
+
+    if (this.#left instanceof Num && this.#right instanceof Num) {
+      return Num.of(this.#left.value + this.#right.value)
+    }
+
+    const l = this.#left.simple()
+    const r = this.#right.simple()
+
+    if (l.equals(this.#left) && r.equals(this.#right)) {
+      return this
+    }
+
+    return Sum.of(l, r).simple()
   }
 
   override toString(): string {

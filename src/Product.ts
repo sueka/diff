@@ -41,31 +41,59 @@ implements Expr, Diffible<
     this.#right = right
   }
 
-  static of(left: unknown, right: Zero): Zero
-  static of(left: Zero, right: unknown): Zero
-  static of<T>(left: T, right: One): T
-  static of<U>(left: One, right: U): U
-  static of(left: Num, right: Num): Num
-  static of<T extends Expr, U extends Expr>(left: T, right: U): Product<T, U>
+  static of(left: unknown, right: Zero, raw?: false): Zero
+  static of(left: Zero, right: unknown, raw?: false): Zero
+  static of<T>(left: T, right: One, raw?: false): T
+  static of<U>(left: One, right: U, raw?: false): U
+  static of(left: Num, right: Num, raw?: false): Num
+  static of<T extends Expr, U extends Expr>(left: T, right: U, raw?: boolean): Product<T, U>
 
-  static of<T extends Expr, U extends Expr>(left: T, right: U) {
-    if (Zero.isZero(left) || Zero.isZero(right)) {
+  static of<T extends Expr, U extends Expr>(left: T, right: U, raw = false):
+  | Zero
+  // | T
+  // | U
+  | Num
+  | Product<T, U>
+  {
+    if (raw) {
+      return new Product(left, right)
+    }
+
+    return new Product(left, right).simple()
+  }
+
+  simple(this: Product<T, Zero>): Zero
+  simple(this: Product<Zero, U>): Zero
+  simple(this: Product<T, One>): T
+  simple(this: Product<One, U>): U
+  simple(this: Product<Num, Num>): Num
+  simple(): this
+
+  simple() {
+    if (Zero.isZero(this.#left) || Zero.isZero(this.#right)) {
       return Zero.instance
     }
 
-    if (One.isOne(right)) {
-      return left
+    if (One.isOne(this.#right)) {
+      return this.#left.simple()
     }
 
-    if (One.isOne(left)) {
-      return right
+    if (One.isOne(this.#left)) {
+      return this.#right.simple()
     }
 
-    if (left instanceof Num && right instanceof Num) {
-      return Num.of(left.value * right.value)
+    if (this.#left instanceof Num && this.#right instanceof Num) {
+      return Num.of(this.#left.value * this.#right.value)
     }
 
-    return new Product(left, right)
+    const l = this.#left.simple()
+    const r = this.#right.simple()
+
+    if (l.equals(this.#left) && r.equals(this.#right)) {
+      return this
+    }
+
+    return Product.of(l, r).simple()
   }
 
   override toString(): string {

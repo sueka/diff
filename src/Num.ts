@@ -35,6 +35,10 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Zero,
     return new Num(value)
   }
 
+  simple() {
+    return this
+  }
+
   override toString(): string {
     return this.#value.toString()
   }

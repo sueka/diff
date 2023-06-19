@@ -17,6 +17,10 @@ export default class Var<T extends string = string> extends HashableEq implement
     return new Var(text)
   }
 
+  simple() {
+    return this
+  }
+
   override toString(): string {
     return this.#text
   }
