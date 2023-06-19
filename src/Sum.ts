@@ -10,7 +10,7 @@ export default class Sum<
   V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
-implements Expr, Diffible<
+implements Expr<V>, Diffible<
   Sum<T, U>,
   | DerivOf<T>
   | DerivOf<U>

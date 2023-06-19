@@ -1,7 +1,9 @@
-interface Expr extends Hashable, IEq {
+interface Expr<
+  V extends string = string // can be extracted by VarOf
+> extends Hashable, IEq {
   _exprBrand: never // TODO: Delete
-  simple(): Expr
+  simple(): Expr // TODO: Make it some narrower if needed
   degree(): number
   degree(variable?: import('./Var').default): number
-  vars(): import('immutable').Set<import('./Var').default>
+  vars(): import('immutable').Set<import('./Var').default<V>>
 }

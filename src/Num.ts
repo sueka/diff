@@ -4,7 +4,7 @@ import HashableEq from './HashableEq'
 import Var from './Var'
 import doubleToLongBits from './doubleToLongBits'
 
-export default class Num extends HashableEq implements Expr, Diffible<Num, Zero, Zero> {
+export default class Num extends HashableEq implements Expr<never>, Diffible<Num, Zero, Zero> {
   #value: number
 
   get value() {
@@ -47,7 +47,7 @@ export default class Num extends HashableEq implements Expr, Diffible<Num, Zero,
     return 0
   }
 
-  vars(): Set<never> {
+  vars(): Set<Var<never>> {
     return Set()
   }
 

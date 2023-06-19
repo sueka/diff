@@ -11,7 +11,7 @@ export default class Product<
   V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
-implements Expr, Diffible<
+implements Expr<V>, Diffible<
   Product<T, U>,
   | Num
   | Product<Num, DerivOf<U>>

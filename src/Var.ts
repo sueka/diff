@@ -2,7 +2,7 @@ import { Set } from 'immutable'
 import HashableEq from './HashableEq'
 import Num, { One, Zero } from './Num'
 
-export default class Var<T extends string = string> extends HashableEq implements Expr, Diffible<Var<T>, One, One | Zero> {
+export default class Var<T extends string = string> extends HashableEq implements Expr<T>, Diffible<Var<T>, One, One | Zero> {
   #text: T
 
   declare _exprBrand: never
