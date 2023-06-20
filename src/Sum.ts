@@ -59,7 +59,7 @@ implements Expr<V>, Diffible<
       case 1: return nzSummands[0]!
       default: return Sum.of(
         Sum.from(...nzSummands.slice(0, -1)),
-        nzSummands.slice(-1)[0]!
+        nzSummands.at(-1)!
       )
     }
   }
