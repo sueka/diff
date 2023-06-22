@@ -11,24 +11,7 @@ export default class Product<
   V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
-implements Expr<V>, Diffible<
-  Product<T, U>,
-  | Num
-  | Product<Num, DerivOf<U>>
-  | Product<DerivOf<T>, Num>
-  | Sum<Product<Var, DerivOf<U>>, U>
-  | Sum<T, Product<DerivOf<T>, Var>>
-  | Sum<Product<T, DerivOf<U>>, Product<DerivOf<T>, U>>
-  ,
-  | Sum<Product<Var, PartialDerivOf<U>>, U>
-  | U
-  | Sum<T, Product<PartialDerivOf<T>, Var>>
-  | T
-  | Sum<Product<T, PartialDerivOf<U>>, Product<PartialDerivOf<T>, U>>
-  | Product<T, PartialDerivOf<U>>
-  | Product<PartialDerivOf<T>, U>
-  | Zero
-> {
+implements Expr<V>, Diffible {
   #left: T
   #right: U
 
@@ -139,8 +122,8 @@ implements Expr<V>, Diffible<
   {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
-        Product.of(this.#left, this.#right.diff()),
-        Product.of(this.#left.diff(), this.#right),
+        Product.of(this.#left, this.#right.diff() as DerivOf<U>),
+        Product.of(this.#left.diff() as DerivOf<T>, this.#right),
       )
     }
 
@@ -179,8 +162,8 @@ implements Expr<V>, Diffible<
   {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
-        Product.of(this.#left, this.#right.grad(variable)),
-        Product.of(this.#left.grad(variable), this.#right)
+        Product.of(this.#left, this.#right.grad(variable) as PartialDerivOf<U>),
+        Product.of(this.#left.grad(variable) as PartialDerivOf<T>, this.#right)
       )
     }
 

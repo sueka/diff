@@ -10,17 +10,7 @@ export default class Sum<
   V extends VarOf<T> | VarOf<U> = VarOf<T> | VarOf<U> // can be extracted by VarOf
 >
 extends HashableEq
-implements Expr<V>, Diffible<
-  Sum<T, U>,
-  | DerivOf<T>
-  | DerivOf<U>
-  | Sum<DerivOf<T>, DerivOf<U>>
-  ,
-  | Sum<PartialDerivOf<T>, PartialDerivOf<U>>
-  | PartialDerivOf<T>
-  | PartialDerivOf<U>
-  | Zero
-> {
+implements Expr<V>, Diffible {
   #left: T
   #right: U
 
@@ -140,8 +130,8 @@ implements Expr<V>, Diffible<
   {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
-        this.#left.diff(),
-        this.#right.diff()
+        this.#left.diff() as DerivOf<T>,
+        this.#right.diff() as DerivOf<U>
       )
     }
 
@@ -168,8 +158,8 @@ implements Expr<V>, Diffible<
   {
     if (canDiff(this.#left) && canDiff(this.#right)) {
       return Sum.of(
-        this.#left.grad(variable),
-        this.#right.grad(variable)
+        this.#left.grad(variable) as PartialDerivOf<T>,
+        this.#right.grad(variable) as PartialDerivOf<U>
       )
     }
 

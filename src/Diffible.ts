@@ -1,4 +1,4 @@
-interface Diffible<P extends Expr, D extends Expr, G extends Expr> {
-  diff(this: P): D
-  grad<S extends string>(this: P, variable: import('./Var').default<S>): G
+interface Diffible {
+  diff<P extends Expr>(this: P): Expr<VarOf<P>>
+  grad<P extends Expr, S extends string>(this: P, variable: import('./Var').default<S>): Expr<VarOf<P>>
 }
